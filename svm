@@ -1,0 +1,7 @@
+>>x=xlsread('SVMdata.xlsx');
+>> y=xlsread('SVM target.xlsx');
+>> SVMModel = fitcsvm(x,y,'KernelScale','auto','Standardize',true,...
+    'OutlierFraction',0.05);    
+>>CVSVMModel = crossval(SVMModel,'Holdout',0.20)
+>>TrainedModel=CVSVMModel.Trained{1}
+>>kfoldLoss(CVSVMModel)
