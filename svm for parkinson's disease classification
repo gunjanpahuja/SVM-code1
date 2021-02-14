@@ -1,0 +1,25 @@
+MATLAB code for Support Vector Machines (SVM) with kernels
+
+The MATLAB code for SVM with kernels for classification of Parkinson's Disease (PD) affected subjects 
+and healthy subjects is presented below. 
+
+Dataset: The dataset for Striatial Binding Ratio (SBR) values as well as Cerebrospinal Fluid biomarkers is publically available at PPMI 
+(More details are available in the paper).
+After downloading the individual data for SBR as well as CSF, the integrated dataset was created as discussed in the paper. The integrated 
+dataset comprises of SBR as well as CSF biomarkers values is divided into training and testing data. 
+10-fold cross-validation is used to overcome the overfitting problem that occurred due to use of imbalanced dataset.
+
+Using SVM
+For supervised learning model, we first train a SVM and then the cross-validation is done. The trained SVM model is then used to 
+classify/predict new data. SVM kernel functions are used to obtain the satisfactory prediction accuracy.
+
+
+Training an SVM Classifier
+>>x=xlsread('SVMdata.xlsx');						   //'x' is a matrix where each row is one observation and each column is one predictor
+>> y=xlsread('SVM target.xlsx');					  //'y' is an array of class labels
+>> SVMModel = fitcsvm(x,y,'KernelScale','auto','Standardize',true,...     // The default value of kernel function is linear for binary class problems. 
+                     'OutlierFraction',0.01, 'kernelfunction','rbf');	 //'SVMModel' is the resulting trained model that contains the optimized parameters and it allows to classify test/new data. 
+>>CVSVMModel = crossval(SVMModel)     					//Cross-validation is done by the classifier by passing it to 'crossval'. By default 10-fold cross-validation is done by the software.
+>>classLoss = kfoldLoss(CVSVMModel);					//'kfoldLoss' returns the loss obtained by cross-validated classification model.
+>> predictedY = resubPredict(SVMModel);   				//'resubPredict(SVMModel)' returns the labels SVMModel predicts for the data.
+>> cm = confusionmat(y, predictedY)	  			        //'confusionmat' creates the confusion matrix, from this matrix the PEMs values like Sensitivity, Specificity, Accuracy, F1-score, and Geometric-mean can be calculated.
